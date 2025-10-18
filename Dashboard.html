@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard | WorkEasy RH</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="min-h-screen bg-gray-50 transition-all">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-blue-700 text-white flex flex-col">
+      <div class="p-6 text-xl font-bold flex items-center gap-2 border-b border-blue-600">
+        <i data-lucide="briefcase"></i> WorkEasy RH
+      </div>
+      <nav class="p-4 flex-1 space-y-2">
+        <a href="dashboard.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-600 transition"><i data-lucide="home"></i> Dashboard</a>
+        <a href="cadastro.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-600 transition"><i data-lucide="user-plus"></i> Cadastrar</a>
+        <a href="tickets.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-600 transition"><i data-lucide="book"></i> Tickets</a>
+        <a href="#" id="exportBtn" class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-600 transition"><i data-lucide="download"></i> Exportar JSON</a>
+        <a href="#" id="clearBtn" class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-600 transition"><i data-lucide="trash-2"></i> Limpar demo</a>
+      </nav>
+      <div class="p-4 border-t border-blue-600 text-sm text-blue-100">© 2025 WorkEasy RH</div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 p-8">
+      <header class="flex justify-between items-center mb-6">
+        <div>
+          <h1 class="text-3xl font-semibold">Painel de RH</h1>
+          <p id="saudacao" class="text-gray-500 text-sm">Bem-vindo</p>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <button id="themeToggle" class="px-3 py-2 rounded-lg bg-white/90 shadow-sm flex items-center gap-2">
+            <i data-lucide="moon"></i><span class="hidden sm:inline ml-1">Modo</span>
+          </button>
+
+          <div class="flex items-center gap-3">
+            <div class="text-right mr-2">
+              <div id="userName" class="font-semibold">Usuário</div>
+              <div class="text-sm text-gray-500" id="userRole">Cargo</div>
+            </div>
+            <img id="userPhoto" src="https://randomuser.me/api/portraits/women/44.jpg" alt="perfil"
+                 class="w-12 h-12 rounded-full border-2 border-blue-500 shadow-md cursor-pointer" />
+          </div>
+        </div>
+      </header>
+
+      <!-- Grid top: metrics + quick ticket form -->
+      <section class="grid lg:grid-cols-3 gap-6 mb-8">
+        <!-- metrics -->
+        <div class="lg:col-span-2 grid md:grid-cols-4 gap-6">
+          <div class="bg-white rounded-2xl shadow p-5 card">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm text-gray-500">Colaboradores</span>
+              <i data-lucide="users" class="text-blue-600"></i>
+            </div>
+            <h2 id="countEmployees" class="text-3xl font-bold">0</h2>
+            <p class="text-sm text-green-600">Dados locais</p>
+          </div>
+          <div class="bg-white rounded-2xl shadow p-5 card">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm text-gray-500">Contratações</span>
+              <i data-lucide="user-plus" class="text-blue-600"></i>
+            </div>
+            <h2 id="countHires" class="text-3xl font-bold">0</h2>
+            <p class="text-sm text-gray-500">Simulado</p>
+          </div>
+          <div class="bg-white rounded-2xl shadow p-5 card">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm text-gray-500">Tickets abertos</span>
+              <i data-lucide="life-buoy" class="text-blue-600"></i>
+            </div>
+            <h2 id="countOpenTickets" class="text-3xl font-bold">0</h2>
+            <p class="text-sm text-gray-500">Pedidos de suporte</p>
+          </div>
+          <div class="bg-white rounded-2xl shadow p-5 card">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm text-gray-500">Satisfação</span>
+              <i data-lucide="smile" class="text-blue-600"></i>
+            </div>
+            <h2 id="countSatisfaction" class="text-3xl font-bold">0%</h2>
+            <p class="text-sm text-green-600">Pesquisa</p>
+          </div>
+        </div>
+
+        <!-- Quick ticket form -->
+        <div class="bg-white rounded-2xl shadow p-5">
+          <h3 class="font-semibold mb-3">Abrir Chamado Rápido</h3>
+          <form id="quickTicket" class="space-y-3">
+            <div>
+              <label class="text-sm text-gray-600">Colaborador</label>
+              <select id="quickEmployee" class="w-full mt-1 rounded border px-3 py-2"></select>
+            </div>
+            <div>
+              <label class="text-sm text-gray-600">Assunto</label>
+              <input id="quickSubject" class="w-full mt-1 rounded border px-3 py-2" placeholder="Resumo do problema" />
+            </div>
+            <div>
+              <label class="text-sm text-gray-600">Descrição</label>
+              <textarea id="quickDesc" rows="3" class="w-full mt-1 rounded border px-3 py-2" placeholder="Detalhes..."></textarea>
+            </div>
+            <div class="flex gap-2">
+              <button class="px-4 py-2 bg-blue-600 text-white rounded" type="submit">Abrir Chamado</button>
+              <a href="tickets.html" class="px-4 py-2 border rounded">Gerenciar</a>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Charts + recent tickets -->
+      <section class="grid lg:grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-2xl shadow">
+          <h3 class="font-semibold mb-3">Contratações - Últimos 6 meses</h3>
+          <canvas id="hiresChart" height="140"></canvas>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow">
+          <h3 class="font-semibold mb-3">Chamados Recentes</h3>
+          <div id="recentTickets" class="space-y-3 table-scroll">
+            <!-- JS popula -->
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    lucide.createIcons();
+    // Theme
+    We.initTheme(document.getElementById('themeToggle'));
+
+    // greeting
+    const h = new Date().getHours();
+    document.getElementById('saudacao').textContent = h < 12 ? 'Bom dia!' : (h < 18 ? 'Boa tarde!' : 'Boa noite!');
+
+    // demo user
+    document.getElementById('userName').textContent = 'Ana Souza';
+    document.getElementById('userRole').textContent = 'Analista de RH';
+
+    // Populate employee select
+    function populateEmployeeSelect() {
+      const sel = document.getElementById('quickEmployee');
+      sel.innerHTML = '<option value="">— Selecionar —</option>';
+      const list = We.readEmployees();
+      list.forEach(e => {
+        const o = document.createElement('option');
+        o.value = e.id; o.textContent = e.name + ' • ' + e.role;
+        sel.appendChild(o);
+      });
+    }
+
+    // render recent tickets
+    function renderRecentTickets() {
+      const list = We.readTickets();
+      // show 6 most recent
+      const recent = list.slice(0,6);
+      const container = document.getElementById('recentTickets');
+      container.innerHTML = '';
+      if (recent.length === 0) {
+        container.innerHTML = '<div class="text-gray-500">Nenhum chamado ainda. <a href="tickets.html" class="text-blue-600 underline">Abrir</a></div>';
+        return;
+      }
+      recent.forEach(t => {
+        const el = document.createElement('div');
+        el.className = 'p-3 border rounded flex items-start gap-3';
+        const badgeClass = t.status === 'open' ? 'ticket-open' : (t.status === 'progress' ? 'ticket-progress' : 'ticket-closed');
+        const emp = We.getEmployee(t.employeeId);
+        el.innerHTML = `
+          <div class="flex-1">
+            <div class="flex justify-between items-start gap-3">
+              <div>
+                <div class="font-semibold">${t.subject}</div>
+                <div class="text-sm text-gray-500">${emp ? emp.name : '— Colaborador removido'} • #${t.number}</div>
+              </div>
+              <div class="text-right">
+                <span class="ticket-badge ${badgeClass}">${t.status}</span>
+                <div class="text-xs text-gray-400 mt-1">${new Date(t.createdAt).toLocaleString()}</div>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(el);
+      });
+    }
+
+    // counters & chart
+    function updateDashboardMetrics() {
+      const employees = We.readEmployees();
+      const tickets = We.readTickets();
+      We.animateCount(document.getElementById('countEmployees'), employees.length);
+      const hires = Math.min(employees.length, Math.round(employees.length * 0.12));
+      We.animateCount(document.getElementById('countHires'), hires);
+      const openCount = tickets.filter(t => t.status === 'open').length;
+      We.animateCount(document.getElementById('countOpenTickets'), openCount);
+      const satisfaction = Math.max(60, Math.min(99, Math.round(75 + (employees.length-8)/6)));
+      We.animateCount(document.getElementById('countSatisfaction'), satisfaction, '%');
+    }
+
+    // Chart
+    const ctx = document.getElementById('hiresChart').getContext('2d');
+    const months = (function() {
+      const d = new Date();
+      const arr = [];
+      for (let i=5;i>=0;i--){
+        const m = new Date(d.getFullYear(), d.getMonth()-i, 1);
+        arr.push(m.toLocaleString('pt-BR', { month: 'short' }));
+      }
+      return arr;
+    })();
+    let hiresData = [2,3,1,4,5,2];
+    const hiresChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [{ label: 'Contratações', data: hiresData, borderRadius:6 }]
+      },
+      options: { responsive:true, plugins: { legend:{display:false} } }
+    });
+
+    // Quick ticket submit
+    document.getElementById('quickTicket').addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const empId = document.getElementById('quickEmployee').value;
+      const subject = document.getElementById('quickSubject').value.trim();
+      const desc = document.getElementById('quickDesc').value.trim();
+      if (!empId) return We.toast('Selecione um colaborador');
+      if (!subject) return We.toast('Informe o assunto');
+      const ticket = {
+        id: We.id(), number: We.generateTicketNumber(), employeeId: empId,
+        subject, description: desc, status: 'open', createdAt: new Date().toISOString()
+      };
+      We.addTicket(ticket);
+      We.toast('Chamado criado');
+      document.getElementById('quickTicket').reset();
+      populateEmployeeSelect();
+      renderRecentTickets();
+      updateDashboardMetrics();
+      // bump chart data a little
+      hiresData[hiresData.length-1] = Math.max(hiresData[hiresData.length-1], 1);
+      hiresChart.update();
+    });
+
+    // export & clear
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const data = { employees: We.readEmployees(), tickets: We.readTickets(), generatedAt: new Date().toISOString() };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'we_export.json'; a.click();
+      URL.revokeObjectURL(url);
+      We.toast('Exportado JSON');
+    });
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      if (!confirm('Apagar todos os dados de demo?')) return;
+      localStorage.removeItem('we_employees_v1');
+      localStorage.removeItem('we_tickets_v1');
+      populateEmployeeSelect(); renderRecentTickets(); updateDashboardMetrics();
+      We.toast('Dados apagados');
+    });
+
+    // On load
+    populateEmployeeSelect();
+    renderRecentTickets();
+    updateDashboardMetrics();
+
+    // allow clicking photo to change (demo)
+    document.getElementById('userPhoto').addEventListener('click', () => {
+      const url = prompt('Cole URL da imagem de perfil (ou deixe em branco):');
+      if (url) document.getElementById('userPhoto').src = url;
+    });
+  </script>
+</body>
+</html>
