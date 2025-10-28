@@ -1,0 +1,37 @@
+1- Como o Sistema Está Organizado 
+
+               O WorkEasy RH foi criado pensando em facilitar a vida na gestão de pessoas e no registro de solicitações, com uma aparência moderna, fácil de usar e que funciona bem em qualquer tela. Desde o começo, o objetivo era que ele fosse simples, acessível e ajudasse a empresa a trabalhar melhor. 
+
+O sistema está organizado em cinco partes principais: 
+
+Página de Acesso: É onde os usuários se identificam para entrar. Tem os campos para e-mail e senha, além de links para “Esqueci a senha?” e “Criar conta de funcionário”. O visual é moderno, com um fundo colorido que se move e um logo que brilha, dando um toque tecnológico. 
+
+Página de Criação de Conta: Serve para cadastrar novos funcionários no sistema. Pede nome completo, e-mail da empresa, senha e confirmação da senha. A verificação dos dados é feita de um jeito fácil, garantindo que tudo esteja correto. O visual é igual ao da página de acesso, com transparência, cantos arredondados e um efeito de vidro. 
+
+Painel do Funcionário: Depois de entrar, o usuário chega a essa página, onde encontra: 
+
+Seu nome e foto; 
+
+Atalhos para registrar solicitações, ver solicitações e cadastrar funcionários; 
+
+Um visual limpo, com ícones fáceis de entender e botões que se movem. É o ponto de partida para usar o sistema. 
+
+Sistema de Registro de Solicitações: Com ele, o funcionário pode pedir coisas internamente, como ajuda do RH, solicitações administrativas, suporte técnico, entre outros. O formulário pede: 
+
+Assunto da solicitação; 
+
+Descrição detalhada; 
+
+Urgência; 
+
+Data de abertura (automática). Todas as solicitações ficam ligadas ao funcionário que as criou, para facilitar o controle. 
+
+Página de Recuperação de Senha: Se o usuário esquecer a senha, pode criar uma nova informando o e-mail que usou para se cadastrar. O sistema faz de conta que envia um e-mail e permite criar uma nova senha, tudo de forma segura e prática. 
+
+2- Que Ferramentas Foram Usadas 
+
+O sistema foi todo feito com tecnologias modernas da internet, buscando ser leve e funcionar em qualquer aparelho: 
+
+Tecnologia O que faz HTML5 Cria a estrutura do sistema (páginas, formulários, botões, áreas). CSS3 (com animações e cores) Cuida do visual, com efeitos de transparência, transições e um fundo que se move. JavaScript (Front-end) Controla o que o usuário faz, como entrar, criar conta e registrar solicitações, guardando informações no computador. LocalStorage (armazenamento local) Simula um banco de dados no computador, guardando informações de usuários e solicitações direto no navegador. 
+
+ 
